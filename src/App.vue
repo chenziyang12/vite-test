@@ -28,7 +28,7 @@
 //<script setup>这种写法会自动将所有顶级变量声明暴露给模板（template）使用
 import HelloWorld from 'comps/HelloWorld.vue'
 import jsx from 'comps/jsx.vue'
-import { ref } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 import { store } from "./stroe"
 //用于绑定ref
 const child = ref(null)
@@ -44,9 +44,10 @@ const childlog = () => {
 //vite中mock使用方法：
 // 1.npm i vite-plugin-mock -d  (开发时依赖)
 // 2.npm i mockjs -s            (运行时依赖)
-// 3.vite.config.js 中加入 viteMockServe({supportTs:false})
-// 4.package.json中script处设置环境变量:"dev": "cross-env NODE_ENV=development vite",
-// 5.npm i cross-env -d
+// 3.vite.config.js 中导入 import {viteMockServe} from 'vite-plugin-mock'
+// 4.vite.config.js plugins中加入 viteMockServe({supportTs:false})
+// 5.package.json中script处设置环境变量:"dev": "cross-env NODE_ENV=development vite",
+// 6.npm i cross-env -d
 const getMockData = () => {
   fetch('/api/createUser', { method: 'POST' })
     .then((res) => res.json())
@@ -55,7 +56,9 @@ const getMockData = () => {
       console.log(data)
     })
 }
-
+// vue3全局挂载
+const app = getCurrentInstance()
+app.appContext.config.globalProperties.log("vue3全局挂载方法")
 </script>
 <style>
 #app {
